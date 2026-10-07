@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Amresco - PSE reports — Monthly Performance Report Builder</title>
+<link id="favicon" rel="icon" type="image/png" href="assets/logo.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.5.4/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="dark">
+<div class="wrap" id="mainApp">
+  <header class="site-header fade-in">
+    <div class="topbar">
+      <div class="topbar-brand">
+        <div class="brand-mark">
+          <img width="30" height="30" style="display:block;object-fit:contain;" src="assets/logo.png" alt="">
+        </div>
+        <img id="hdrLogo" alt="Ameresco logo" style="height:1.4em;vertical-align:-.3em;margin-right:8px;display:none;">
+        <span class="brand-name">Ameresco</span>
+        <span class="brand-divider">|</span>
+        <span class="brand-product">PSE Reports</span>
+      </div>
+      <div class="topbar-actions">
+        <span class="tagline">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" fill="#FFC94D"/><g stroke="#FFC94D" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="23"/><line x1="1" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="23" y2="12"/><line x1="4.2" y1="4.2" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.8" y2="19.8"/><line x1="19.8" y1="4.2" x2="17.7" y2="6.3"/><line x1="6.3" y1="17.7" x2="4.2" y2="19.8"/></g></svg>
+          Providing a Sustainable Future
+        </span>
+        <button type="button" class="icon-btn" id="historyBtn" title="Report history" aria-label="Report history">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <span class="history-count" id="historyCount" style="display:none;">0</span>
+        </button>
+        <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">
+          <span class="toggle-knob" id="toggleKnob">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none"><circle cx="12" cy="12" r="5" fill="#FFC94D"/><g stroke="#FFC94D" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="23"/><line x1="1" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="23" y2="12"/><line x1="4.2" y1="4.2" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.8" y2="19.8"/><line x1="19.8" y1="4.2" x2="17.7" y2="6.3"/><line x1="6.3" y1="17.7" x2="4.2" y2="19.8"/></g></svg>
+          </span>
+          <span class="toggle-label" id="toggleLabel">LIGHT</span>
+        </button>
+      </div>
+    </div>
+    <div class="hero" id="heroBanner">
+      <div class="hero-content">
+        <div class="hero-title-row">
+          <svg class="hero-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" fill="#FFC94D"/><g stroke="#FFC94D" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="23"/><line x1="1" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="23" y2="12"/><line x1="4.2" y1="4.2" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.8" y2="19.8"/><line x1="19.8" y1="4.2" x2="17.7" y2="6.3"/><line x1="6.3" y1="17.7" x2="4.2" y2="19.8"/></g></svg>
+          <h1>Solar Performance Report Generator</h1>
+        </div>
+        <p>Turn your monitoring data into clear, client-ready reports.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-grid fade-in d1">
+    <!-- LEFT COLUMN -->
+    <div class="dash-col-left">
+      <!-- 1. Process Stepper Card -->
+      <div class="card stepper-card">
+        <div class="step-item" id="stepUploadItem">
+          <div class="step-badge step-badge-green">1</div>
+          <div class="step-info">
+            <div class="step-title">Upload</div>
+            <div class="step-desc">Step your CSV file</div>
+          </div>
+          <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" id="stepAnalyseItem">
+          <div class="step-badge step-badge-blue">2</div>
+          <div class="step-info">
+            <div class="step-title">Analyse</div>
+            <div class="step-desc">Choose date &amp; run calculations</div>
+          </div>
+          <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" id="stepDeliverItem">
+          <div class="step-badge step-badge-green">3</div>
+          <div class="step-info">
+            <div class="step-title">Deliver</div>
+            <div class="step-desc">Generate client-ready report</div>
+          </div>
+          <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+
+      <!-- 2. Data Ready! Card (Dropzone & file status) -->
+      <div class="card data-ready-card" id="drop">
+        <!-- SVG leaf decoration in corner -->
+        <svg class="leaf-watermark" viewBox="0 0 160 120" fill="none">
+          <path d="M120 10C90 20 60 55 50 90C75 80 110 65 130 35C140 20 135 12 120 10Z" fill="#1E7A4C" fill-opacity="0.12"/>
+          <path d="M150 40C125 50 100 80 95 110C115 102 142 90 155 65C162 50 158 42 150 40Z" fill="#1E7A4C" fill-opacity="0.08"/>
+        </svg>
+        
+        <div class="drop" id="emptyDropState">
+          <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M20 16v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3"/></svg>
+          <div class="main">Drop your DAS export here, or click to browse</div>
+          <div class="sub">Exported from your monitoring platform &middot; .csv only</div>
+        </div>
+
+        <div class="data-ready-header" id="dataReadyHeader" style="display:none;">
+          <div class="data-ready-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <div class="data-ready-title">Data Ready!</div>
+            <div class="data-ready-desc" id="dataReadyDesc">Your DAS data has been successfully uploaded and validated.</div>
+          </div>
+        </div>
+
+        <div class="file-info-pill" id="fileInfoPill" style="display:none;">
+          <div class="file-pill-left">
+            <div class="csv-badge">CSV</div>
+            <div class="file-pill-text">
+              <div class="file-pill-name" id="readyFileName">Ware-Palmer Road. Aug-2026.csv</div>
+              <div class="file-pill-meta" id="readyFileMeta">
+                <span>📅 12 Data points</span>
+                <span>•</span>
+                <span>6 months</span>
+                <span>•</span>
+                <span>6.46 MB</span>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn-change-file" id="changeFileBtn" title="Select a different CSV file">
+            <span>Change file</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </button>
+        </div>
+
+        <input type="file" id="fileInput" accept=".csv,text/csv">
+        <div id="parseStatus" class="status"></div>
+        <div id="summaryBox" style="display:none;"><div class="empty-hint">Upload a file and I'll show you what's inside ✨</div></div>
+      </div>
+
+      <!-- 3. Performance Summary Card with Animated Mini Chart -->
+      <div class="card perf-summary-card">
+        <div class="perf-header">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1F5EA9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          <span>Performance Summary</span>
+        </div>
+        <div class="perf-body">
+          <div class="perf-stat-group">
+            <div class="perf-stat">
+              <div class="perf-icon-circle green">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M13 2L3 14h8l-1 8 11-13h-8l1-7z"/></svg>
+              </div>
+              <div class="perf-stat-text">
+                <div class="perf-val text-green" id="perfActualVal">—</div>
+                <div class="perf-lbl">Actual YTD</div>
+              </div>
+            </div>
+            <div class="perf-divider"></div>
+            <div class="perf-stat">
+              <div class="perf-icon-circle blue">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              </div>
+              <div class="perf-stat-text">
+                <div class="perf-val" id="perfVsExpVal">—</div>
+                <div class="perf-lbl">vs Expected</div>
+              </div>
+            </div>
+            <div class="perf-divider"></div>
+            <div class="perf-stat">
+              <div class="perf-stat-text no-icon">
+                <div class="perf-val text-purple" id="perfVsEstVal">—</div>
+                <div class="perf-lbl">vs Modeled</div>
+              </div>
+            </div>
+          </div>
+          <div class="perf-chart-container" id="perfChartContainer" style="display:none;">
+            <canvas id="perfMiniChart" width="170" height="100"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="dash-col-right">
+      <!-- 4. Report Details Card -->
+      <div class="card report-details-card">
+        <div class="card-head-title">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <span>Report Details</span>
+        </div>
+        <div class="field">
+          <label for="locationInput">Site location (site, city)</label>
+          <div class="input-icon-wrap">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <input type="text" id="locationInput" value="" placeholder="e.g. Ware – Palmer Road, AZ" list="siteNameList" autocomplete="off">
+            <datalist id="siteNameList">
+              <option value="Canandaigua"></option>
+              <option value="Clover Meadow"></option>
+              <option value="Greendale"></option>
+              <option value="Arney"></option>
+              <option value="Forbes"></option>
+              <option value="Winters 1"></option>
+              <option value="Winters 2"></option>
+              <option value="Wolcott 1"></option>
+              <option value="Wolcott 2"></option>
+              <option value="Tamarac"></option>
+              <option value="Oak Hill Solar 1"></option>
+              <option value="Oak Hill Solar 2"></option>
+              <option value="Elmbrook Solar"></option>
+              <option value="Cotuit"></option>
+              <option value="Three Rivers"></option>
+              <option value="East Brookfield Adams"></option>
+              <option value="Wallum"></option>
+              <option value="Ware - Palmer Road"></option>
+            </datalist>
+          </div>
+        </div>
+        <div class="field">
+          <label for="reportDate">Report date</label>
+          <div class="input-icon-wrap">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <input type="date" id="reportDate">
+          </div>
+        </div>
+        <div class="field">
+          <label for="preparedBy">Prepared by letterhead (contact info)</label>
+          <div class="input-icon-wrap textarea-wrap">
+            <svg class="field-icon text-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="22.01"/><line x1="15" y1="22" x2="15" y2="22.01"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/></svg>
+            <textarea id="preparedBy">Ameresco
+117 Flanders Road, Unit 100
+Westborough, MA 01581</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Quick Summary Card -->
+      <div class="card quick-summary-card">
+        <div class="qs-header">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1E7A4C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>
+          </svg>
+          <span>Quick Summary</span>
+        </div>
+        <div class="qs-stat-list">
+          <div class="qs-stat-card">
+            <div class="qs-stat-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <div class="qs-stat-value" id="qsAcCapacity">&mdash;</div>
+            <div class="qs-stat-label">AC Capacity</div>
+          </div>
+          <div class="qs-stat-card">
+            <div class="qs-stat-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="qs-stat-value" id="qsDcCapacity">&mdash;</div>
+            <div class="qs-stat-label">DC Capacity</div>
+          </div>
+          <div class="qs-stat-card">
+            <div class="qs-stat-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="qs-stat-value" id="qsSiteLocation">&mdash;</div>
+            <div class="qs-stat-label">Total Months</div>
+          </div>
+          <div class="qs-stat-card">
+            <div class="qs-stat-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="qs-stat-value" id="qsReportingPeriod">&mdash;</div>
+            <div class="qs-stat-label">Reporting Period</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Generate Report Button & Actions -->
+      <div class="generate-action-wrap" id="generateCard">
+        <button class="primary btn-generate" id="generateBtn">
+          <span>+ Generate Report</span>
+          <svg class="sparkle-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div id="genStatus" class="status"></div>
+
+        <div id="progressWrap" class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+          <div class="steps" id="stepsList">
+            <div class="step-row" data-step="csv"><div class="step-dot"></div><div>Processing CSV data</div></div>
+            <div class="step-row" data-step="charts"><div class="step-dot"></div><div>Rendering charts in the background</div></div>
+            <div class="step-row" data-step="docx"><div class="step-dot"></div><div>Building the Word document</div></div>
+            <div class="step-row" data-step="done"><div class="step-dot"></div><div>Packaging &amp; saving to history</div></div>
+          </div>
+        </div>
+
+        <div class="success-view" id="successView">
+          <div class="success-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="success-title">Report ready!</div>
+          <div class="success-sub" id="successSub">Your .docx download should have started automatically.</div>
+          <button class="primary" id="downloadBtn">&#11015; Re-download .docx</button>
+          <button class="primary go" id="newReportBtn">&#128228; New report: select another file</button>
+        </div>
+
+        <!-- Hidden offscreen charts for Word document export -->
+        <div class="chart-offscreen" id="chartsPreview" aria-hidden="true">
+          <canvas id="chart1"></canvas><canvas id="chart2"></canvas><canvas id="chart3"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <svg width="16" height="16" viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="#1B6B45"/></svg>
+    Runs entirely in your browser &mdash; your data is never uploaded anywhere.
+  </footer>
+</div>
+
+<div class="history-overlay" id="historyOverlay"></div>
+<div class="history-panel" id="historyPanel">
+  <div class="history-head">
+    <h3>Report History</h3>
+    <button class="close-x" id="historyClose" aria-label="Close">&times;</button>
+  </div>
+  <div class="history-toolbar">
+    <div class="history-search-wrap">
+      <svg class="history-search-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="historySearch" class="history-search" placeholder="Search reports...">
+    </div>
+    <button type="button" class="history-clear-all" id="historyClearAll">Clear all</button>
+  </div>
+  <div class="history-body" id="historyBody">
+    <div class="empty-hint">No reports generated yet.</div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
