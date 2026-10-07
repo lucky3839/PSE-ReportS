@@ -336,4 +336,4 @@ button.ghost:hover{background:rgba(17,19,24,.06);}
 footer{margin-top:26px;text-align:center;font-size:12px;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:8px;}
 
 /* Hero banner photo (moved out of an inline style) */
-#heroBanner{background-image:url("assets/hero.jpg");}
+#heroBanner{background-image:url("hero.jpg");}
