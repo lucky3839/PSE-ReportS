@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<title>Solar Performance Report Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bgimg" aria-hidden="true"></div>
+<header><button id="theme" type="button">LIGHT</button></header>
+
+<main>
+  <h1><svg class="sun" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>Solar Performance Report Generator</h1>
+  <p class="sub">Choose your client to open their report workspace.</p>
+
+  <div class="grid">
+    <a class="client" id="c1" href="#">
+      <div class="logo">T</div>
+      <h2>Triforce</h2>
+      <p>Upload the daily data file and get the Excel and Word reports in your reference format.</p>
+      <span class="go">Generate Triforce</span>
+    </a>
+    <a class="client" id="c2" href="#">
+      <div class="logo">P</div>
+      <h2>Puresky</h2>
+      <p>Turn your monitoring data into clear, client-ready reports. Create a new report or update the previous one.</p>
+      <span class="go">Generate PSE</span>
+    </a>
+  </div>
+</main>
+
+<footer>Your data stays in your browser. Each report site runs on its own.</footer>
+
+<div id="appview" hidden>
+  <div class="appbar"><button id="back" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back to clients</button><span id="appname"></span></div>
+  <iframe id="appframe" title="Report generator"></iframe>
+</div>
+<div id="toast" role="status" hidden></div>
+<script src="script.js"></script>
+</body>
+</html>
