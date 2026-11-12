@@ -1,25 +1,18 @@
-# Solar Performance Report Generator
+# Client Reports Portal
 
-Client launcher for the Triforce and Puresky report generators.
+Landing page for the Solar Performance Report Generator (Triforce and Puresky).
 
-```
-index.html        page markup
-style.css         all styles
-script.js         launcher behaviour
-triforce.html     Triforce report app
-puresky.html      Puresky report app
-favicon.png, background.jpg
-```
+All files sit in one folder:
 
-## Publish on GitHub Pages
+- `index.html` - page markup
+- `style.css` - all styles
+- `script.js` - portal logic (theme toggle, opens client apps)
+- `triforce.html`, `puresky.html` - the two report generators
+- `background.jpg`, `favicon.png`, `logo-*.jpg` - images
 
-1. Push these files to a repository (keep `index.html` at the root).
-2. In the repository go to **Settings -> Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**, select `main` and `/ (root)`, then **Save**.
-4. The site appears at `https://<your-username>.github.io/<repo-name>/`.
 
-To run locally, serve the folder (for example `python3 -m http.server`) and open `http://localhost:8000`.
+## Run locally
+Open `index.html` in a browser, or run `python3 -m http.server` in this folder.
 
-## Adding another client
-
-Put its page in the same folder, then add it to `APPS` and `NAMES` in `script.js`, and add a card in `index.html`.
+## Deploy on GitHub Pages
+Push to GitHub, then Settings → Pages → Deploy from branch → `main` / root.
